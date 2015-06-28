@@ -1,0 +1,64 @@
+
+body {
+    margin: 0 auto;
+}
+
+#wrapper-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#wrapper {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    width: 80%;
+    height: 100%;
+    min-width: 800px;
+}
+
+#cabecalho {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 5em;
+    text-align: center;
+}
+
+#menu {
+    position: absolute;
+    top: 5.5em;
+    width: 100%;
+    height: 1.5em;
+    padding: 0.5em;
+}
+
+#conteudo-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding-top: 8em;
+    padding-bottom: 2.5em;
+}
+
+#conteudo {
+    position: relative;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0.5em;
+}
+
+#rodape {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2em;
+    padding: 0.5em;
+    text-align: center;
+}

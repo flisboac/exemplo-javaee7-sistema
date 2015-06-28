@@ -1,0 +1,45 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Sistema Genérico: <ui:insert name="tituloPagina"/></title>
+        <h:outputStylesheet name="grid/grid.css" library="primefaces" />
+        <h:outputStylesheet name="css/geral.css" library="geral"/>
+        <h:outputStylesheet name="css/simples.css" library="simples"/>
+        <ui:insert name="htmlHead" />
+    </h:head>
+    <h:body>
+        <div id="wrapper-wrapper" class="allSidesShadow">
+            <div id="wrapper" class="allSidesShadow">
+                
+                <div id="conteudo-wrapper">
+                    <div id="conteudo">
+                        <ui:insert name="conteudo" />
+                    </div>
+                </div> 
+                
+                <div id="menu">
+                    <h:form id="_frmMenu">
+                        <p:menubar>
+                            <p:submenu label="Fulaninho" icon="fa fa-user">
+                                <p:menuitem value="Sair" />
+                            </p:submenu>
+                        </p:menubar>
+                    </h:form>
+                </div>
+                
+                <div id="cabecalho" class="allSidesShadow">
+                    <h1>Cadastro de Usuários</h1>
+                </div>
+                
+                <div id="rodape" class="allSidesShadow">
+                    (/c) 2015, Flávio Lisbôa
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>
