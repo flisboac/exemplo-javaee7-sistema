@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="/WEB-INF/templates/layouts/admin.xhtml"
+                xmlns:f="http://java.sun.com/jsf/core" 
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="tituloPagina">
+        Cadastro de Usuários
+    </ui:define>
+
+    <ui:define name="conteudo">
+        <!-- Mensagens postadas pelo ViewBean serão mostradas por este -->
+        <!-- elemento. autoUpdate=true garante que ele não precise ser -->
+        <!-- por outros elementos quando uma mensagem é postada. -->
+        <!-- globalObly=true garante que ele não mostre mensagens enviadas -->
+        <!-- para elementos específicos (e.g. validações nos forms de -->
+        <!-- cadastro). showDetail=true garante que ele mostre toda a mensagem, -->
+        <!-- e não só o resumo. -->
+        <p:growl id="grwMensagens" autoUpdate="true" globalOnly="true" showDetail="true" />
+
+        <!-- Nota pessoal: rendered com EL não funciona como esperado. O -->
+        <!-- JSF (ou o PrimeFaces, não sei) é incapaz de renderizar e/ou -->
+        <!-- ocultar o form dinamicamente. Coloque rendered nos filhos do -->
+        <!-- form ao invés disso, e faça o update no form; o form continuará -->
+        <!-- renderizado, mas os filhos terão o comportamento esperado. -->
+        <h:form id="frmListar">
+            <p:contextMenu for="tblLista" rendered="#{usuarioViewBean.listando}">
+                <p:menuitem value="Visualizar"
+                            icon="fa fa-search" 
+                            action="#{usuarioViewBean.onVisualizar}"
+                            update="@form frmEditar" />
+                <p:menuitem value="Editar"
+                            icon="fa fa-pencil" 
+                            action="#{usuarioViewBean.onEditar}"
+                            update="@form frmEditar" />
+                <p:menuitem value="Excluir"
+                            icon="fa fa-trash" 
+                            action="#{usuarioViewBean.onExcluir}"
+                            update="@form frmExcluir" />
+            </p:contextMenu>
+
+            <p:toolbar styleClass="form-toolbar" rendered="#{usuarioViewBean.listando}">
+                <!-- Nota pessoal: O immediate=true é necessário no toolbar -->
+                <!-- até por que nenhuma validação é necessária de ser -->
+                <!-- realizada neste form para criar uma nova entidade. -->                
+                <p:toolbarGroup align="right">
+                    <p:commandButton value="Novo"
+                                     icon="fa fa-file"
+                                     immediate="true"
+                                     action="#{usuarioViewBean.onIncluir}"
+                                     update="@form frmEditar" />
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <p:dataTable id="tblLista"
+                         value="#{usuarioViewBean.entidades}" 
+                         var="entidade"
+
+                         paginator="true"
+                         rows="5"
+                         style="width: 100%"
+
+                         selection="#{usuarioViewBean.entidade}"
+                         selectionMode="single"
+                         rowKey="#{entidade.id}"
+                         
+                         rendered="#{usuarioViewBean.listando}">
+
+                <f:facet name="header">
+                    Usuários
+                </f:facet>
+                
+                <p:column headerText="ID">
+                    #{entidade.id}
+                </p:column>
+
+                <p:column headerText="E-mail">
+                    #{entidade.email}
+                </p:column>
+
+                <p:column headerText="Nome">
+                    #{entidade.nome}
+                </p:column>
+
+                <p:column headerText="Data de Criação">
+                    #{entidade.dataCriacao}
+                </p:column>
+
+                <!-- O f:setPropertyActionListener dentro do p:commandButton -->
+                <!-- permite que a entidade atualmente selecionada no -->
+                <!-- seja enviada para o ViewBean antes do action ser -->
+                <!-- chamado. -->
+                <p:column headerText="Ações" styleClass="form-acoes">
+                    <p:commandButton alt="Visualizar" label="Visualizar" 
+                                     icon="fa fa-search"
+                                     action="#{usuarioViewBean.onVisualizar()}"
+                                     update="@form frmEditar">
+                        <f:setPropertyActionListener value="#{entidade}"
+                                                     target="#{usuarioViewBean.entidade}" />
+                    </p:commandButton>
+                    <p:commandButton alt="Editar" label="Editar" 
+                                     icon="fa fa-pencil"
+                                     action="#{usuarioViewBean.onEditar()}"
+                                     update="@form frmEditar">
+                        <f:setPropertyActionListener value="#{entidade}"
+                                                     target="#{usuarioViewBean.entidade}" />
+                    </p:commandButton>
+                    <p:commandButton alt="Excluir" label="Excluir"
+                                     icon="fa fa-trash"
+                                     action="#{usuarioViewBean.onExcluir()}"
+                                     update="@form frmExcluir">
+                        <f:setPropertyActionListener value="#{entidade}"
+                                                     target="#{usuarioViewBean.entidade}" />
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+
+        <h:form id="frmEditar" styleClass="form-edicao">
+            <p:panelGrid columns="3" layout="grid" rendered="#{usuarioViewBean.preparadoParaEdicao}">
+                <f:facet name="header">
+                    #{usuarioViewBean.mensagemAcaoSendoRealizada}
+                </f:facet>
+
+                <h:outputLabel for="txtId" value="ID" rendered="#{not usuarioViewBean.inserindo}" />
+                <p:inputText id="txtId" value="#{usuarioViewBean.entidade.id}" disabled="true" rendered="#{not usuarioViewBean.inserindo}" />
+                <p:message for="txtId" rendered="#{not usuarioViewBean.inserindo}" />
+
+                <h:outputLabel for="txtDataCriacao" value="Data de Criação" rendered="#{not usuarioViewBean.inserindo}" />
+                <p:calendar id="txtDataCriacao" value="#{usuarioViewBean.entidade.dataCriacao}" disabled="true" rendered="#{not usuarioViewBean.inserindo}" />
+                <p:message for="txtDataCriacao" rendered="#{not usuarioViewBean.inserindo}" />
+
+                <h:outputLabel for="txtNome" value="Nome" />
+                <p:inputText id="txtNome" value="#{usuarioViewBean.entidade.nome}" disabled="#{not usuarioViewBean.realizandoEdicao}" />
+                <p:message for="txtNome" />
+
+                <h:outputLabel for="txtEmail" value="E-mail" />
+                <p:inputText id="txtEmail" value="#{usuarioViewBean.entidade.email}" disabled="#{not usuarioViewBean.realizandoEdicao}" />
+                <p:message for="txtEmail" />
+
+                <f:facet name="footer">
+                    <div class="texto-centralizado">
+                        <p:commandButton type="submit"
+                                         value="Salvar"
+                                         icon="fa fa-save"
+                                         action="#{usuarioViewBean.persistir()}"
+                                         rendered="#{not usuarioViewBean.visualizando}"
+                                         update="@form frmListar" />
+                        <p:commandButton immediate="true"
+                                         value="Voltar"
+                                         icon="fa fa-undo"
+                                         action="#{usuarioViewBean.cancelar()}"
+                                         update="@form frmListar" />
+                    </div>
+                </f:facet>
+            </p:panelGrid>
+        </h:form>
+
+        <h:form id="frmExcluir" styleClass="form-edicao">
+            <p:panelGrid columns="1" layout="grid" rendered="#{usuarioViewBean.excluindo}">
+                <p class="texto-centralizado">
+                    Tem certeza de que deseja excluir "#{usuarioViewBean.entidade.nome}" (ID:#{usuarioViewBean.entidade.id})?
+                </p>
+                
+                <f:facet name="footer">
+                    <div class="texto-centralizado">
+                        <p:commandButton type="submit"
+                                         value="Excluir"
+                                         icon="fa fa-trash"
+                                         action="#{usuarioViewBean.persistir()}"
+                                         update="@form frmListar" />
+                        <p:commandButton immediate="true"
+                                         value="Cancelar"
+                                         icon="fa fa-undo"
+                                         action="#{usuarioViewBean.cancelar()}"
+                                         update="@form frmListar" />
+                    </div>
+                </f:facet>
+            </p:panelGrid>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

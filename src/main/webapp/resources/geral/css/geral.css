@@ -10,6 +10,10 @@
     font-family: Sans-serif;
 }
 
+.ui-menuitem-icon.ui-icon.fa {
+    margin-left: 0.4em;
+    margin-right: 0.4em;
+}
 
 /*
  * HACKS
@@ -36,3 +40,32 @@
     ";
 }
 
+.form-edicao input[type=text] {
+    width: 100%;
+}
+
+.form-edicao label {
+    float: right;
+}
+
+.form-edicao input[type=button], .form-edicao button {
+    padding: 0.5em;
+    margin: 0.5em;
+}
+
+.form-toolbar button {
+    padding: 0.3em;
+    margin: 0.3em;
+}
+
+.form-acoes {
+    text-align: center;
+}
+
+.form-acoes > * {
+    margin: 0.3em;
+}
+
+.texto-centralizado {
+    text-align: center;
+}

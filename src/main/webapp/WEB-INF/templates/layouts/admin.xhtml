@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Sistema Genérico: <ui:insert name="tituloPagina"/></title>
+        <h:outputStylesheet name="grid/grid.css" library="primefaces" />
+        <h:outputStylesheet name="css/geral.css" library="geral"/>
+        <h:outputStylesheet name="css/admin.css" library="admin"/>
+        <ui:insert name="htmlHead" />
+    </h:head>
+    <h:body>
+        <div id="wrapper-wrapper" class="allSidesShadow">
+            <div id="wrapper" class="allSidesShadow">
+                
+                <div id="conteudo-wrapper">
+                    <div id="conteudo">
+                        <ui:insert name="conteudo" />
+                    </div>
+                </div> 
+                
+                <div id="menu">
+                    <h:form id="_frmMenu">
+                        <!-- Nota: Se não estiver usando FlowScoped, -->
+                        <!-- prefira usar a propriedade url ao invés de -->
+                        <!-- outcome, para evitar problemas com a criação -->
+                        <!-- de escopos por ClientWindow (e.g. aparecer -->
+                        <!-- jfwid na URL de redirecionamento). -->
+                        <p:menubar>
+                            <p:submenu label="Fulaninho" icon="fa fa-user">
+                                <p:menuitem value="Início" icon="fa fa-home" url="/" />
+                                <p:menuitem value="Sair" icon="fa fa-power-off" />
+                            </p:submenu>
+                            
+                            <p:submenu label="Cadastro" icon="fa fa-folder-open">
+                                <p:menuitem value="Usuários" icon="fa fa-users" url="/usuarios" />
+                            </p:submenu>
+                        </p:menubar>
+                    </h:form>
+                </div>
+                
+                <div id="cabecalho" class="allSidesShadow">
+                    <h1>Sistema Genérico</h1>
+                </div>
+                
+                <div id="rodape" class="allSidesShadow">
+                    (/c) 2015, Flávio Lisbôa
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>

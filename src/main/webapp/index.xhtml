@@ -1,7 +1,7 @@
-<?xml version="1.1" encoding="UTF-8"?>
 <!DOCTYPE html>
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                template="/WEB-INF/templates/layouts/simples.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                template="/WEB-INF/templates/layouts/admin.xhtml"
                 xmlns:f="http://java.sun.com/jsf/core" 
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
@@ -12,6 +12,8 @@
     </ui:define>
     
     <ui:define name="conteudo">
+        <p:growl id="grwMensagens" autoUpdate="true" globalOnly="true" redisplay="false" showDetail="true" />
+        
         <h2>Bem-vindo ao sistema genérico.</h2>
         
         <p>Escolha uma opção no menu superior.</p>
