@@ -1,78 +1,32 @@
 
 package com.flaviolisboa.sistema.views.usuarios;
 
-import com.flaviolisboa.sistema.usuarios.Usuario;
+import com.flaviolisboa.sistema.excecoes.SistemaException;
+import com.flaviolisboa.sistema.negocio.usuarios.Usuario;
+import com.flaviolisboa.sistema.negocio.usuarios.UsuarioDao;
 import com.flaviolisboa.sistema.utils.FacesUtils;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.event.ValueChangeEvent;
+
 
 @ManagedBean
 @ViewScoped
 public class UsuarioViewBean implements Serializable {
-
-    // Isto é apenas para exemplo! Mais à frente nós iremos remover
-    // completamente esta classe!
-    private static class dao {
-        private static Long sequencia = 6l;
-        private static final List<Usuario> usuarios = new ArrayList<>();
-
-        // Inserimos 5 usuários de exemplo.
-        static {
-            for (long i = 1; i <= 5; ++i) {
-                Usuario usuarioGerado = new Usuario();
-                usuarioGerado.setId(i);
-                usuarioGerado.setEmail(String.format("usuario%02d@exemplo.com", i));
-                usuarioGerado.setNome(String.format("Usuário %d", i));
-                usuarioGerado.setDataCriacao(new Date());
-                usuarios.add(usuarioGerado);
-            }
-        }
     
-        public static <T extends Usuario> T instanciar(Class<T> classeEntidade) {
-            try {
-                return classeEntidade.newInstance();
-                
-            } catch (InstantiationException | IllegalAccessException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
-        
-        public static List<Usuario> listar() {
-            return new ArrayList<>(usuarios);
-        }
-        
-        public static void inserir(Usuario usuario) {
-            usuario.setDataCriacao(new Date());
-            usuario.setId(sequencia++);
-            usuarios.add(usuario);
-        }
-        
-        public static void alterar(Usuario usuario) {
-            for (int i = 0; i < usuarios.size(); ++i) {
-                if (usuarios.get(i).getId().equals(usuario.getId())) {
-                    usuarios.set(i, usuario);
-                    break;
-                }
-            }
-        }
-        
-        public static void excluir(Usuario usuario) {
-            for (int i = 0; i < usuarios.size(); ++i) {
-                if (usuarios.get(i).getId().equals(usuario.getId())) {
-                    usuarios.remove(i);
-                    break;
-                }
-            }
-        }
-    }
+    /*
+     * DI
+     * --
+     */
+    
+    @EJB
+    private UsuarioDao dao;
     
     /*
      * CAMPOS
@@ -126,7 +80,12 @@ public class UsuarioViewBean implements Serializable {
     }
     
     public void doListar() {
-        this.entidades = dao.listar();
+        try {
+            this.entidades = dao.listarTodos();
+            
+        } catch (SistemaException ex) {
+            FacesUtils.mensagem(FacesMessage.SEVERITY_INFO, null, "ERRO!", ex.getLocalizedMessage());
+        }
     }
     
     /*
@@ -143,20 +102,38 @@ public class UsuarioViewBean implements Serializable {
     }
     
     public String inserir() {
-        dao.inserir(entidade);
-        FacesUtils.mensagem(FacesMessage.SEVERITY_INFO, null, getMensagemAcaoRealizada(), null);
+        try {
+            dao.inserir(entidade);
+            FacesUtils.mensagem(FacesMessage.SEVERITY_INFO, null, getMensagemAcaoRealizada(), null);
+            
+        } catch (SistemaException ex) {
+            FacesUtils.mensagem(FacesMessage.SEVERITY_INFO, null, "ERRO!", ex.getLocalizedMessage());
+        }
+        
         return listar();
     }
     
     public String editar() {
-        dao.alterar(entidade);
-        FacesUtils.mensagem(FacesMessage.SEVERITY_INFO, null, getMensagemAcaoRealizada(), null);
+        try {
+            dao.alterar(entidade);
+            FacesUtils.mensagem(FacesMessage.SEVERITY_INFO, null, getMensagemAcaoRealizada(), null);
+            
+        } catch (SistemaException ex) {
+            FacesUtils.mensagem(FacesMessage.SEVERITY_INFO, null, "ERRO!", ex.getLocalizedMessage());
+        }
+        
         return listar();
     }
     
     public String excluir() {
-        dao.excluir(entidade);
-        FacesUtils.mensagem(FacesMessage.SEVERITY_INFO, null, getMensagemAcaoRealizada(), null);
+        try {
+            dao.excluir(entidade);
+            FacesUtils.mensagem(FacesMessage.SEVERITY_INFO, null, getMensagemAcaoRealizada(), null);
+            
+        } catch (SistemaException ex) {
+            FacesUtils.mensagem(FacesMessage.SEVERITY_INFO, null, "ERRO!", ex.getLocalizedMessage());
+        }
+        
         return listar();
     }
     

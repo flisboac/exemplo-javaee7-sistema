@@ -4,6 +4,7 @@ package com.flaviolisboa.sistema.constantes;
 public class Constantes {
 
     public static final String NomeBundleMensagens = "mensagens";
+    public static final String NomePersistenceUnitPadrao = "sistema-PU";
     
     public static class Email {
         public static final int TamanhoMinimo = 2;
